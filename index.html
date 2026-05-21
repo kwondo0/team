@@ -2,44 +2,57 @@
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
     <title>과제 마감 카운트다운</title>
 
     <link rel="stylesheet" href="style.css" />
   </head>
+
   <body>
     <div class="app">
-      <!-- 사이드바 -->
       <aside class="sidebar">
         <h2>📚 과제 관리</h2>
 
         <ul class="menu">
           <li class="menu-item active" data-category="전체">📋 전체</li>
+
           <li class="menu-item" data-category="전공">📘 전공</li>
+
           <li class="menu-item" data-category="교양">📗 교양</li>
+
           <li class="menu-item" data-category="팀플">👥 팀플</li>
+
           <li class="menu-item" data-category="시험">📝 시험</li>
         </ul>
       </aside>
 
-      <!-- 메인 -->
       <main class="main">
+        <section class="hero">
+          <h2>📚 대학생을 위한 스마트 과제 관리</h2>
+
+          <p>과제 마감일, 진행률, 중요도를 한눈에 관리해보세요.</p>
+        </section>
+
         <div class="top-bar">
           <div>
             <h1>📚 과제 마감 카운트다운</h1>
+
             <p id="taskStats">완료: 0개 / 전체: 0개</p>
+
             <p id="todayTask">🔥 오늘 마감 과제 없음</p>
+
+            <p id="progressSummary">📈 평균 진행률: 0%</p>
           </div>
 
           <button id="darkModeBtn">🌙 다크모드</button>
         </div>
 
-        <!-- 검색 -->
         <div class="search-box">
           <input type="text" id="searchInput" placeholder="🔍 과제 검색" />
         </div>
 
-        <!-- 입력 -->
         <div class="input-box">
           <input type="text" id="taskInput" placeholder="과제 이름" />
 
@@ -54,7 +67,9 @@
 
           <select id="priorityInput">
             <option value="매우 중요">매우 중요</option>
+
             <option value="보통">보통</option>
+
             <option value="낮음">낮음</option>
           </select>
 
@@ -63,7 +78,6 @@
 
         <div id="messageBox"></div>
 
-        <!-- 카드 영역 -->
         <div id="taskList"></div>
       </main>
     </div>

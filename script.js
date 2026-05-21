@@ -1,16 +1,25 @@
 const addBtn = document.getElementById('addBtn')
+
 const taskInput = document.getElementById('taskInput')
+
 const dateInput = document.getElementById('dateInput')
+
 const categoryInput = document.getElementById('categoryInput')
+
 const priorityInput = document.getElementById('priorityInput')
 
 const taskList = document.getElementById('taskList')
+
 const searchInput = document.getElementById('searchInput')
 
 const taskStats = document.getElementById('taskStats')
+
 const todayTask = document.getElementById('todayTask')
 
+const progressSummary = document.getElementById('progressSummary')
+
 const darkModeBtn = document.getElementById('darkModeBtn')
+
 const messageBox = document.getElementById('messageBox')
 
 const menuItems = document.querySelectorAll('.menu-item')
@@ -36,8 +45,6 @@ darkModeBtn.addEventListener('click', () => {
   document.body.classList.toggle('dark')
 })
 
-/* 사이드바 */
-
 menuItems.forEach((item) => {
   item.addEventListener('click', () => {
     menuItems.forEach((i) => i.classList.remove('active'))
@@ -50,26 +57,34 @@ menuItems.forEach((item) => {
   })
 })
 
-/* 추가 */
-
 function addTask() {
-  const taskName = taskInput.value
+  const taskName = taskInput.value.trim()
+
   const taskDate = dateInput.value
+
   const category = categoryInput.value
+
   const priority = priorityInput.value
 
   if (taskName === '' || taskDate === '') {
     alert('과제 이름과 날짜를 입력하세요!')
+
     return
   }
 
   const task = {
     id: Date.now(),
+
     name: taskName,
+
     date: taskDate,
+
     category,
+
     priority,
+
     completed: false,
+
     progress: 0,
   }
 
@@ -80,20 +95,19 @@ function addTask() {
   messageBox.textContent = randomMessage
 
   saveTasks()
+
   renderTasks()
 
   taskInput.value = ''
   dateInput.value = ''
 }
 
-/* 렌더링 */
-
 function renderTasks() {
   taskList.innerHTML = ''
 
   const keyword = searchInput.value.toLowerCase()
 
-  const filteredTasks = tasks.filter((task) => {
+  let filteredTasks = tasks.filter((task) => {
     const matchSearch = task.name.toLowerCase().includes(keyword)
 
     const matchCategory =
@@ -102,31 +116,57 @@ function renderTasks() {
     return matchSearch && matchCategory
   })
 
-  filteredTasks.sort((a, b) => new Date(a.date) - new Date(b.date))
+  if (filteredTasks.length === 0) {
+    taskList.innerHTML = `
+      <div class="empty-state">
+        <h2>
+          📭 아직 등록된 과제가 없습니다.
+        </h2>
+
+        <p>
+          새 과제를 추가해보세요!
+        </p>
+      </div>
+    `
+  }
+
+  filteredTasks.sort((a, b) => {
+    if (a.completed !== b.completed) {
+      return a.completed - b.completed
+    }
+
+    return new Date(a.date) - new Date(b.date)
+  })
 
   let completedCount = 0
   let todayCount = 0
 
   filteredTasks.forEach((task) => {
-    if (task.completed) completedCount++
+    if (task.completed) {
+      completedCount++
+    }
 
     const taskDiv = document.createElement('div')
 
     taskDiv.classList.add('task')
 
-    /* 제목 */
+    if (task.category === '전공') {
+      taskDiv.classList.add('major')
+    } else if (task.category === '교양') {
+      taskDiv.classList.add('liberal')
+    } else if (task.category === '팀플') {
+      taskDiv.classList.add('team')
+    } else if (task.category === '시험') {
+      taskDiv.classList.add('exam')
+    }
 
     const title = document.createElement('h2')
 
     title.textContent = task.name
 
-    /* 카테고리 */
-
     const categoryText = document.createElement('p')
 
     categoryText.textContent = `📂 카테고리: ${task.category}`
-
-    /* 중요도 */
 
     const priorityText = document.createElement('p')
 
@@ -136,12 +176,11 @@ function renderTasks() {
       priorityText.classList.add('priority-high')
     }
 
-    /* 카운트다운 */
-
     const countdown = document.createElement('p')
 
     function updateCountdown() {
       const now = new Date()
+
       const deadline = new Date(task.date)
 
       const diff = deadline - now
@@ -174,6 +213,7 @@ function renderTasks() {
 
       if (days === 0) {
         taskDiv.classList.add('shake')
+
         todayCount++
       }
     }
@@ -181,8 +221,6 @@ function renderTasks() {
     updateCountdown()
 
     setInterval(updateCountdown, 1000)
-
-    /* 진행률 */
 
     const progressText = document.createElement('p')
 
@@ -200,13 +238,14 @@ function renderTasks() {
 
     progressBar.appendChild(progress)
 
-    /* 슬라이더 */
-
     const slider = document.createElement('input')
 
     slider.type = 'range'
+
     slider.min = 0
+
     slider.max = 100
+
     slider.value = task.progress
 
     slider.classList.add('slider')
@@ -220,8 +259,6 @@ function renderTasks() {
 
       saveTasks()
     })
-
-    /* 버튼 */
 
     const btnBox = document.createElement('div')
 
@@ -240,14 +277,14 @@ function renderTasks() {
     deleteBtn.classList.add('delete-btn')
 
     btnBox.appendChild(completeBtn)
-    btnBox.appendChild(deleteBtn)
 
-    /* 완료 */
+    btnBox.appendChild(deleteBtn)
 
     completeBtn.addEventListener('click', () => {
       task.completed = !task.completed
 
       saveTasks()
+
       renderTasks()
     })
 
@@ -255,24 +292,28 @@ function renderTasks() {
       taskDiv.classList.add('completed')
     }
 
-    /* 삭제 */
-
     deleteBtn.addEventListener('click', () => {
       tasks = tasks.filter((t) => t.id !== task.id)
 
       saveTasks()
+
       renderTasks()
     })
 
-    /* 카드 조립 */
-
     taskDiv.appendChild(title)
+
     taskDiv.appendChild(categoryText)
+
     taskDiv.appendChild(priorityText)
+
     taskDiv.appendChild(countdown)
+
     taskDiv.appendChild(progressText)
+
     taskDiv.appendChild(progressBar)
+
     taskDiv.appendChild(slider)
+
     taskDiv.appendChild(btnBox)
 
     taskList.appendChild(taskDiv)
@@ -285,15 +326,21 @@ function renderTasks() {
   } else {
     todayTask.textContent = '🔥 오늘 마감 과제 없음'
   }
-}
 
-/* 저장 */
+  const totalProgress = tasks.reduce(
+    (sum, task) => sum + Number(task.progress),
+    0,
+  )
+
+  const averageProgress =
+    tasks.length > 0 ? Math.floor(totalProgress / tasks.length) : 0
+
+  progressSummary.textContent = `📈 평균 진행률: ${averageProgress}%`
+}
 
 function saveTasks() {
   localStorage.setItem('tasks', JSON.stringify(tasks))
 }
-
-/* 불러오기 */
 
 function loadTasks() {
   const saved = localStorage.getItem('tasks')

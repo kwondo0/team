@@ -16,8 +16,6 @@ body {
   min-height: 100vh;
 }
 
-/* 사이드바 */
-
 .sidebar {
   width: 250px;
   background-color: #222;
@@ -49,11 +47,31 @@ body {
   background-color: #4a90e2;
 }
 
-/* 메인 */
-
 .main {
   flex: 1;
   padding: 40px;
+}
+
+.hero {
+  background: linear-gradient(135deg, #4a90e2, #6a5acd);
+
+  color: white;
+
+  padding: 30px;
+
+  border-radius: 20px;
+
+  margin-bottom: 30px;
+}
+
+.hero h2 {
+  font-size: 36px;
+  margin-bottom: 15px;
+}
+
+.hero p {
+  font-size: 18px;
+  line-height: 1.6;
 }
 
 .top-bar {
@@ -76,8 +94,6 @@ body {
   cursor: pointer;
 }
 
-/* 검색 */
-
 .search-box {
   margin-bottom: 20px;
 }
@@ -88,8 +104,6 @@ body {
   border-radius: 10px;
   border: 1px solid #ccc;
 }
-
-/* 입력 */
 
 .input-box {
   display: flex;
@@ -128,7 +142,14 @@ body {
   font-weight: bold;
 }
 
-/* 카드 */
+.empty-state {
+  background-color: white;
+  padding: 50px;
+  border-radius: 20px;
+  text-align: center;
+  color: #777;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}
 
 .task {
   background-color: white;
@@ -139,6 +160,10 @@ body {
   transition: 0.3s;
 }
 
+.task:hover {
+  transform: translateY(-5px);
+}
+
 .task h2 {
   margin-bottom: 10px;
 }
@@ -147,16 +172,32 @@ body {
   margin-bottom: 8px;
 }
 
-.safe {
-  border-left: 10px solid green;
+.major {
+  border-left: 10px solid #4a90e2;
 }
 
-.warning {
+.liberal {
   border-left: 10px solid orange;
 }
 
+.team {
+  border-left: 10px solid purple;
+}
+
+.exam {
+  border-left: 10px solid crimson;
+}
+
+.safe {
+  border-right: 10px solid green;
+}
+
+.warning {
+  border-right: 10px solid orange;
+}
+
 .danger {
-  border-left: 10px solid red;
+  border-right: 10px solid red;
 }
 
 .completed {
@@ -168,8 +209,6 @@ body {
   color: red;
   font-weight: bold;
 }
-
-/* 진행률 */
 
 .progress-bar {
   width: 100%;
@@ -190,8 +229,6 @@ body {
   width: 100%;
   margin-bottom: 15px;
 }
-
-/* 버튼 */
 
 .btn-box {
   display: flex;
@@ -216,8 +253,6 @@ body {
   cursor: pointer;
 }
 
-/* 흔들림 */
-
 .shake {
   animation: shake 0.5s infinite;
 }
@@ -226,21 +261,23 @@ body {
   0% {
     transform: translateX(0);
   }
+
   25% {
     transform: translateX(-5px);
   }
+
   50% {
     transform: translateX(5px);
   }
+
   75% {
     transform: translateX(-5px);
   }
+
   100% {
     transform: translateX(0);
   }
 }
-
-/* 다크모드 */
 
 .dark {
   background-color: #1e1e1e;
@@ -257,8 +294,6 @@ body {
   color: white;
   border: 1px solid #666;
 }
-
-/* 모바일 */
 
 @media (max-width: 768px) {
   .app {
@@ -299,5 +334,13 @@ body {
   .complete-btn,
   .delete-btn {
     width: 100%;
+  }
+
+  .hero h2 {
+    font-size: 28px;
+  }
+
+  .hero p {
+    font-size: 16px;
   }
 }
