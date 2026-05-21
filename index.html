@@ -8,45 +8,64 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <div class="container">
-      <div class="top-bar">
-        <h1>📚 과제 마감 카운트다운</h1>
-        <button id="darkModeBtn">🌙 다크모드</button>
-      </div>
+    <div class="app">
+      <!-- 사이드바 -->
+      <aside class="sidebar">
+        <h2>📚 과제 관리</h2>
 
-      <div class="stats">
-        <p id="taskStats">완료: 0개 / 전체: 0개</p>
-        <p id="todayTask">🔥 오늘 마감 과제 없음</p>
-      </div>
+        <ul class="menu">
+          <li class="menu-item active" data-category="전체">📋 전체</li>
+          <li class="menu-item" data-category="전공">📘 전공</li>
+          <li class="menu-item" data-category="교양">📗 교양</li>
+          <li class="menu-item" data-category="팀플">👥 팀플</li>
+          <li class="menu-item" data-category="시험">📝 시험</li>
+        </ul>
+      </aside>
 
-      <div class="search-box">
-        <input type="text" id="searchInput" placeholder="🔍 과제 검색" />
-      </div>
+      <!-- 메인 -->
+      <main class="main">
+        <div class="top-bar">
+          <div>
+            <h1>📚 과제 마감 카운트다운</h1>
+            <p id="taskStats">완료: 0개 / 전체: 0개</p>
+            <p id="todayTask">🔥 오늘 마감 과제 없음</p>
+          </div>
 
-      <div class="input-box">
-        <input type="text" id="taskInput" placeholder="과제 이름" />
+          <button id="darkModeBtn">🌙 다크모드</button>
+        </div>
 
-        <input type="datetime-local" id="dateInput" />
+        <!-- 검색 -->
+        <div class="search-box">
+          <input type="text" id="searchInput" placeholder="🔍 과제 검색" />
+        </div>
 
-        <select id="categoryInput">
-          <option value="전공">전공</option>
-          <option value="교양">교양</option>
-          <option value="팀플">팀플</option>
-          <option value="시험">시험</option>
-        </select>
+        <!-- 입력 -->
+        <div class="input-box">
+          <input type="text" id="taskInput" placeholder="과제 이름" />
 
-        <select id="priorityInput">
-          <option value="매우 중요">매우 중요</option>
-          <option value="보통">보통</option>
-          <option value="낮음">낮음</option>
-        </select>
+          <input type="datetime-local" id="dateInput" />
 
-        <button id="addBtn">추가</button>
-      </div>
+          <select id="categoryInput">
+            <option value="전공">전공</option>
+            <option value="교양">교양</option>
+            <option value="팀플">팀플</option>
+            <option value="시험">시험</option>
+          </select>
 
-      <div id="messageBox"></div>
+          <select id="priorityInput">
+            <option value="매우 중요">매우 중요</option>
+            <option value="보통">보통</option>
+            <option value="낮음">낮음</option>
+          </select>
 
-      <div id="taskList"></div>
+          <button id="addBtn">추가</button>
+        </div>
+
+        <div id="messageBox"></div>
+
+        <!-- 카드 영역 -->
+        <div id="taskList"></div>
+      </main>
     </div>
 
     <script src="script.js"></script>

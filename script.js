@@ -3,12 +3,19 @@ const taskInput = document.getElementById('taskInput')
 const dateInput = document.getElementById('dateInput')
 const categoryInput = document.getElementById('categoryInput')
 const priorityInput = document.getElementById('priorityInput')
+
 const taskList = document.getElementById('taskList')
 const searchInput = document.getElementById('searchInput')
+
 const taskStats = document.getElementById('taskStats')
 const todayTask = document.getElementById('todayTask')
+
 const darkModeBtn = document.getElementById('darkModeBtn')
 const messageBox = document.getElementById('messageBox')
+
+const menuItems = document.querySelectorAll('.menu-item')
+
+let currentCategory = '전체'
 
 let tasks = []
 
@@ -17,7 +24,6 @@ const messages = [
   '📖 미래의 당신이 고마워합니다.',
   '🚀 A+ 가보자!',
   '💪 조금만 더 힘내자!',
-  '⏰ 지금 시작하면 안 늦는다!',
 ]
 
 loadTasks()
@@ -29,6 +35,22 @@ searchInput.addEventListener('input', renderTasks)
 darkModeBtn.addEventListener('click', () => {
   document.body.classList.toggle('dark')
 })
+
+/* 사이드바 */
+
+menuItems.forEach((item) => {
+  item.addEventListener('click', () => {
+    menuItems.forEach((i) => i.classList.remove('active'))
+
+    item.classList.add('active')
+
+    currentCategory = item.dataset.category
+
+    renderTasks()
+  })
+})
+
+/* 추가 */
 
 function addTask() {
   const taskName = taskInput.value
@@ -64,14 +86,21 @@ function addTask() {
   dateInput.value = ''
 }
 
+/* 렌더링 */
+
 function renderTasks() {
   taskList.innerHTML = ''
 
   const keyword = searchInput.value.toLowerCase()
 
-  const filteredTasks = tasks.filter((task) =>
-    task.name.toLowerCase().includes(keyword),
-  )
+  const filteredTasks = tasks.filter((task) => {
+    const matchSearch = task.name.toLowerCase().includes(keyword)
+
+    const matchCategory =
+      currentCategory === '전체' || task.category === currentCategory
+
+    return matchSearch && matchCategory
+  })
 
   filteredTasks.sort((a, b) => new Date(a.date) - new Date(b.date))
 
@@ -82,74 +111,34 @@ function renderTasks() {
     if (task.completed) completedCount++
 
     const taskDiv = document.createElement('div')
+
     taskDiv.classList.add('task')
 
+    /* 제목 */
+
     const title = document.createElement('h2')
+
     title.textContent = task.name
 
+    /* 카테고리 */
+
     const categoryText = document.createElement('p')
+
     categoryText.textContent = `📂 카테고리: ${task.category}`
 
+    /* 중요도 */
+
     const priorityText = document.createElement('p')
+
     priorityText.textContent = `⭐ 중요도: ${task.priority}`
 
     if (task.priority === '매우 중요') {
       priorityText.classList.add('priority-high')
     }
 
+    /* 카운트다운 */
+
     const countdown = document.createElement('p')
-
-    const progressText = document.createElement('p')
-    progressText.textContent = `📈 진행도: ${task.progress}%`
-
-    const progressBar = document.createElement('div')
-    progressBar.classList.add('progress-bar')
-
-    const progress = document.createElement('div')
-    progress.classList.add('progress')
-
-    progress.style.width = `${task.progress}%`
-
-    progressBar.appendChild(progress)
-
-    // 슬라이더
-
-    const slider = document.createElement('input')
-
-    slider.type = 'range'
-    slider.min = 0
-    slider.max = 100
-    slider.value = task.progress
-
-    slider.classList.add('slider')
-
-    slider.addEventListener('input', () => {
-      task.progress = slider.value
-
-      progress.style.width = `${task.progress}%`
-
-      progressText.textContent = `📈 진행도: ${task.progress}%`
-
-      saveTasks()
-    })
-
-    // 버튼
-
-    const btnBox = document.createElement('div')
-    btnBox.classList.add('btn-box')
-
-    const completeBtn = document.createElement('button')
-    completeBtn.textContent = '완료'
-    completeBtn.classList.add('complete-btn')
-
-    const deleteBtn = document.createElement('button')
-    deleteBtn.textContent = '삭제'
-    deleteBtn.classList.add('delete-btn')
-
-    btnBox.appendChild(completeBtn)
-    btnBox.appendChild(deleteBtn)
-
-    // 카운트다운
 
     function updateCountdown() {
       const now = new Date()
@@ -159,7 +148,9 @@ function renderTasks() {
 
       if (diff <= 0) {
         countdown.textContent = '⛔ 마감되었습니다!'
+
         taskDiv.classList.add('danger')
+
         return
       }
 
@@ -191,7 +182,67 @@ function renderTasks() {
 
     setInterval(updateCountdown, 1000)
 
-    // 완료 버튼
+    /* 진행률 */
+
+    const progressText = document.createElement('p')
+
+    progressText.textContent = `📈 진행도: ${task.progress}%`
+
+    const progressBar = document.createElement('div')
+
+    progressBar.classList.add('progress-bar')
+
+    const progress = document.createElement('div')
+
+    progress.classList.add('progress')
+
+    progress.style.width = `${task.progress}%`
+
+    progressBar.appendChild(progress)
+
+    /* 슬라이더 */
+
+    const slider = document.createElement('input')
+
+    slider.type = 'range'
+    slider.min = 0
+    slider.max = 100
+    slider.value = task.progress
+
+    slider.classList.add('slider')
+
+    slider.addEventListener('input', () => {
+      task.progress = slider.value
+
+      progress.style.width = `${task.progress}%`
+
+      progressText.textContent = `📈 진행도: ${task.progress}%`
+
+      saveTasks()
+    })
+
+    /* 버튼 */
+
+    const btnBox = document.createElement('div')
+
+    btnBox.classList.add('btn-box')
+
+    const completeBtn = document.createElement('button')
+
+    completeBtn.textContent = '완료'
+
+    completeBtn.classList.add('complete-btn')
+
+    const deleteBtn = document.createElement('button')
+
+    deleteBtn.textContent = '삭제'
+
+    deleteBtn.classList.add('delete-btn')
+
+    btnBox.appendChild(completeBtn)
+    btnBox.appendChild(deleteBtn)
+
+    /* 완료 */
 
     completeBtn.addEventListener('click', () => {
       task.completed = !task.completed
@@ -204,7 +255,7 @@ function renderTasks() {
       taskDiv.classList.add('completed')
     }
 
-    // 삭제 버튼
+    /* 삭제 */
 
     deleteBtn.addEventListener('click', () => {
       tasks = tasks.filter((t) => t.id !== task.id)
@@ -213,7 +264,7 @@ function renderTasks() {
       renderTasks()
     })
 
-    // 카드 추가
+    /* 카드 조립 */
 
     taskDiv.appendChild(title)
     taskDiv.appendChild(categoryText)
@@ -236,9 +287,13 @@ function renderTasks() {
   }
 }
 
+/* 저장 */
+
 function saveTasks() {
   localStorage.setItem('tasks', JSON.stringify(tasks))
 }
+
+/* 불러오기 */
 
 function loadTasks() {
   const saved = localStorage.getItem('tasks')
